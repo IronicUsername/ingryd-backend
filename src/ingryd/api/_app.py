@@ -5,36 +5,34 @@ from typing import Any
 from werkzeug.exceptions import HTTPException
 from werkzeug.routing import Map, Rule
 from werkzeug.wrappers import Request, Response
-from werkzeug.middleware.shared_data import SharedDataMiddleware
+from werkzeug.wsgi import responder
+
+from ._ingryd_extra import search, users
 
 _LOGGER = logging.getLogger(__package__)
 
 
-def users():
-    return 'hi'
-
-
-def application(environ: Any, start_response: Any) -> Any:
+@responder
+def app(environ: Any, start_response: Any) -> Any:
     request = Request(environ)
 
-    if request.method == 'OPTIONS':
-        resp = Response(b'', status=204, content_type='text/plain')
-    else:
-        url_map = Map([
-            Rule('/users', methods=['POST', 'GET', 'PUT'], endpoint='users'),
-        ])
+    url_map = Map([
+        Rule('/users', methods=['GET', 'POST'], endpoint='users'),
+        Rule('/search', methods=['GET'], endpoint='search'),
+    ])
 
-        endpoints = {
-            'users': users,
-        }
+    endpoints = {
+        'users': users,
+        'search': search,
+    }
 
-        urls = url_map.bind_to_environ(environ)
+    urls = url_map.bind_to_environ(environ)
 
-        try:
-            resp = urls.dispatch(lambda e, v: endpoints[e](request, **v))
-        except HTTPException as e:
-            resp = Response(json.dumps({'error': {'code': e.code, 'description': e.description}}).encode(),
-                            content_type='application/json', status=e.code)
+    try:
+        resp = urls.dispatch(lambda e, v: endpoints[e](request, **v))
+    except HTTPException as e:
+        resp = Response(json.dumps({'error': {'code': e.code, 'description': e.description}}).encode(),
+                        content_type='application/json', status=e.code)
 
     _LOGGER.info(f'{request.remote_addr} @ '
                  f'"{request.method} {request.path} HTTP/1.1" {resp.status_code} '
@@ -44,6 +42,4 @@ def application(environ: Any, start_response: Any) -> Any:
 
 
 def create_app():
-    return SharedDataMiddleware(application, {
-        '/static': ('ingryd.api', 'static'),
-    })
+    return app
