@@ -1,0 +1,28 @@
+# Git
+.git*
+
+# Python 3
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.cache/
+.coverage*
+cov_html/
+cov.xml
+
+*.egg-info/
+pip-wheel-metadata/
+
+# macOS
+.DS_Store
+
+# Visual Studio Code
+.vscode/
+
+# Virtual environments
+venv/
+.venv/
+
+myenv.sh
+.myenv
+myenv.fish
