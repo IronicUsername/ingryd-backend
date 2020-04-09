@@ -84,8 +84,8 @@ def create_db():
                 cur.execute('SELECT 1;')
             break
         except psycopg2.OperationalError:
-            _LOGGER.info('Service could not connect to database; retrying in 10 seconds.')
-            sleep(10)
+            _LOGGER.info('Service could not connect to database; retrying in 3 seconds.')
+            sleep(3)
 
     with psycopg2.connect(**_DSN) as con, con.cursor() as cur:
         cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
