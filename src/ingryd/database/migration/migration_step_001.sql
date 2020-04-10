@@ -1,9 +1,4 @@
-ALTER TABLE users
-    ADD COLUMN test varchar;
-
-INSERT INTO users (id, fname, lname) VALUES
-    ('00000000-0000-0000-0000-000000000001'::uuid, 'Rick', 'Sanchez'),
-    ('00000000-0000-0000-0000-000000000002'::uuid, 'Morty', 'Smith');
+INSERT INTO employees (fname, lname, password, email) VALUES ('Rick', 'Sanchez', '2980wrlwem9g0f', 'fuckyou@lol.com');
 
 -- Migration Step 001
 -- Changes:
