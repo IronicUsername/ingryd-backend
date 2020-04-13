@@ -50,7 +50,6 @@ def query(q: str, param: Union[Dict[str, Any], Tuple[Any, ...]] = ()) -> psycopg
     -------
     cursor: psycopg2.extensions.cursor
         Cursor with execution result.
-
     """
     try:
         with _connection(threading.get_ident()) as con, con.cursor() as cur:

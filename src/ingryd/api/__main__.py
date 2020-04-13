@@ -15,7 +15,7 @@ RUN_WITH_CHEROOT = int(environ.get('RUN_WITH_CHEROOT', '0')) == 1
 signal.signal(signal.SIGTERM, sigterm_handler)
 
 setup_db_version = create_db()
-_LOGGER.info(f'Starting `ingryd` API on {HOST}:{PORT}.')
+_LOGGER.info(f'Starting `ingryd` API on {HOST}:{PORT}. Database running on version {setup_db_version}.')
 
 app = create_app()
 

@@ -7,7 +7,7 @@ from werkzeug.routing import Map, Rule
 from werkzeug.wrappers import Request, Response
 from werkzeug.wsgi import responder
 
-from ._ingryd_extra import search, users
+from ._ingryd_extra import healty, search, users
 
 _LOGGER = logging.getLogger(__package__)
 
@@ -17,11 +17,13 @@ def app(environ: Any, start_response: Any) -> Any:
     request = Request(environ)
 
     url_map = Map([
+        Rule('/healty', methods=['GET'], endpoint='healty'),
         Rule('/users', methods=['GET', 'POST'], endpoint='users'),
         Rule('/search', methods=['GET'], endpoint='search'),
     ])
 
     endpoints = {
+        'healty': healty,
         'users': users,
         'search': search,
     }
